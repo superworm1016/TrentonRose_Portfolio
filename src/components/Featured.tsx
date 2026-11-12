@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
   Bot,
@@ -14,8 +14,8 @@ import {
   Sparkles,
   User,
 } from 'lucide-react';
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
-import { Reveal, SectionHeading } from './ui';
+import { useCallback, useState, type ReactNode } from 'react';
+import { Reveal, SectionHeading, Spotlight } from './ui';
 
 type Slide = {
   kicker: string;
@@ -227,11 +227,9 @@ export function Featured() {
     [],
   );
 
-  useEffect(() => {
-    if (paused) return;
-    const id = window.setInterval(() => go(1), 7000);
-    return () => window.clearInterval(id);
-  }, [paused, go, index]);
+  // Auto-advance is driven by the active dot's fill animation (pauses on hover/focus).
+  // Visitors who prefer reduced motion get a static carousel.
+  const autoplay = !useReducedMotion();
 
   const slide = SLIDES[index];
 
@@ -246,8 +244,9 @@ export function Featured() {
         />
 
         <Reveal>
-          <div
+          <Spotlight
             className="card overflow-hidden"
+            style={{ boxShadow: 'var(--shadow)' }}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             onFocus={() => setPaused(true)}
@@ -313,10 +312,22 @@ export function Featured() {
                         aria-label={`Go to slide ${i + 1}: ${s.kicker}`}
                         aria-current={i === index}
                         onClick={() => setState([i, i > index ? 1 : -1])}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${
-                          i === index ? 'w-7 bg-accent' : 'w-1.5 bg-[var(--text-3)] hover:bg-[var(--text-2)]'
+                        className={`relative h-1.5 overflow-hidden rounded-full transition-all duration-300 ${
+                          i === index ? 'w-10 bg-[var(--line-strong)]' : 'w-1.5 bg-[var(--text-3)] hover:bg-[var(--text-2)]'
                         }`}
-                      />
+                      >
+                        {i === index &&
+                          (autoplay ? (
+                            <span
+                              key={index}
+                              onAnimationEnd={() => go(1)}
+                              style={{ animationPlayState: paused ? 'paused' : 'running' }}
+                              className="absolute inset-y-0 left-0 animate-progress rounded-full bg-gradient-to-r from-accent to-purple"
+                            />
+                          ) : (
+                            <span className="absolute inset-0 rounded-full bg-accent" />
+                          ))}
+                      </button>
                     ))}
                   </div>
                   <div className="flex items-center gap-2">
@@ -333,7 +344,7 @@ export function Featured() {
                 </div>
               </div>
             </div>
-          </div>
+          </Spotlight>
         </Reveal>
       </div>
     </section>

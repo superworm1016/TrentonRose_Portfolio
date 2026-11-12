@@ -1,9 +1,37 @@
+import { Cloud, Database, LayoutTemplate, Server, ShieldCheck, Smartphone, type LucideIcon } from 'lucide-react';
 import { skills } from '../data/resume';
 import { tone } from '../lib/tone';
-import { Reveal, SectionHeading } from './ui';
+import { Reveal, SectionHeading, Spotlight } from './ui';
+
+const ICONS: Record<string, LucideIcon> = {
+  '01': Server,
+  '02': LayoutTemplate,
+  '03': Smartphone,
+  '04': Database,
+  '05': Cloud,
+  '06': ShieldCheck,
+};
+
+function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boolean }) {
+  return (
+    <div className="flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
+      <div className={`flex w-max shrink-0 gap-3 pr-3 ${reverse ? 'animate-marquee-reverse' : 'animate-marquee'}`}>
+        {[...items, ...items].map((s, i) => (
+          <span
+            key={i}
+            className="whitespace-nowrap rounded-full border border-line bg-elev/70 px-4 py-2 font-mono text-[13px] text-t2"
+          >
+            {s}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function Skills() {
   const all = skills.flatMap((s) => s.items);
+  const half = Math.ceil(all.length / 2);
 
   return (
     <section id="skills" className="py-20 md:py-28">
@@ -18,18 +46,21 @@ export function Skills() {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {skills.map((group, i) => {
             const t = tone(group.color);
+            const Icon = ICONS[group.id] ?? Server;
             return (
               <Reveal key={group.id} delay={(i % 3) * 0.07} className="h-full">
-                <article className="card group relative h-full overflow-hidden p-6 transition-colors hover:bg-elev2/50">
-                  <div
-                    aria-hidden="true"
-                    className={`pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br ${t.glow} opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100`}
-                  />
-                  <div className="flex items-baseline justify-between">
-                    <span className={`font-mono text-3xl font-semibold ${t.text}`}>{group.id}</span>
-                    <span className="font-mono text-xs text-t3">{group.items.length} tools</span>
+                <Spotlight as="article" className="card group h-full overflow-hidden p-6 sm:p-7">
+                  <div className="flex items-start justify-between">
+                    <span
+                      className={`grid h-12 w-12 place-items-center rounded-2xl border ${t.border} ${t.soft} ${t.text} transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105`}
+                    >
+                      <Icon className="h-[22px] w-[22px]" strokeWidth={1.8} />
+                    </span>
+                    <span className="font-mono text-xs text-t3">
+                      <span className={t.text}>{group.id}</span> / 06
+                    </span>
                   </div>
-                  <h3 className="mt-4 text-xl font-bold tracking-tight">{group.name}</h3>
+                  <h3 className="mt-5 text-xl font-bold tracking-tight">{group.name}</h3>
                   <p className="mt-2 text-[15px] leading-relaxed text-t2">{group.blurb}</p>
                   <ul className="mt-5 flex flex-wrap gap-1.5">
                     {group.items.map((item) => (
@@ -38,25 +69,16 @@ export function Skills() {
                       </li>
                     ))}
                   </ul>
-                </article>
+                </Spotlight>
               </Reveal>
             );
           })}
         </div>
       </div>
 
-      {/* Marquee */}
-      <div
-        aria-hidden="true"
-        className="relative mt-16 overflow-hidden border-y border-line py-5 [mask-image:linear-gradient(90deg,transparent,black_10%,black_90%,transparent)]"
-      >
-        <div className="flex w-max animate-marquee gap-10 whitespace-nowrap font-mono text-sm text-t3">
-          {[...all, ...all].map((s, i) => (
-            <span key={i} className="flex items-center gap-10">
-              {s} <span className="text-accent">✦</span>
-            </span>
-          ))}
-        </div>
+      <div aria-hidden="true" className="mt-16 space-y-3">
+        <MarqueeRow items={all.slice(0, half)} />
+        <MarqueeRow items={all.slice(half)} reverse />
       </div>
     </section>
   );

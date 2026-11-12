@@ -1,5 +1,28 @@
 import { motion, type HTMLMotionProps } from 'framer-motion';
-import type { ReactNode } from 'react';
+import { useRef, type ElementType, type HTMLAttributes, type PointerEvent, type ReactNode } from 'react';
+
+/** Card wrapper whose border and surface light up around the cursor. */
+export function Spotlight({
+  as = 'div',
+  className = '',
+  children,
+  ...rest
+}: { as?: ElementType; className?: string; children: ReactNode } & HTMLAttributes<HTMLElement>) {
+  const Tag = as;
+  const ref = useRef<HTMLElement>(null);
+  const onPointerMove = (e: PointerEvent<HTMLElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    el.style.setProperty('--my', `${e.clientY - r.top}px`);
+  };
+  return (
+    <Tag ref={ref} onPointerMove={onPointerMove} className={`spotlight ${className}`} {...rest}>
+      {children}
+    </Tag>
+  );
+}
 
 /** Fade-and-rise when the element scrolls into view (once). */
 export function Reveal({
@@ -40,12 +63,12 @@ export function SectionHeading({
 }) {
   return (
     <Reveal className="mb-12 max-w-3xl md:mb-16">
-      <p className="mb-4 inline-flex flex-col font-mono text-sm font-medium text-accent">
+      <p className="mb-5 inline-flex items-center gap-2.5 font-mono text-sm font-medium text-accent">
+        <span className="h-px w-8 bg-gradient-to-r from-transparent to-accent" />
         <span>{`// ${label}`}</span>
-        <span className="mt-1.5 h-px w-full bg-gradient-to-r from-accent to-transparent" />
       </p>
-      <h2 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl md:text-[3.4rem] md:leading-[1.05]">
-        {title} {muted && <span className="text-t3">{muted}</span>}
+      <h2 className="text-balance text-4xl font-bold tracking-[-0.035em] sm:text-5xl md:text-[3.5rem] md:leading-[1.04]">
+        <span className="text-fade">{title}</span> {muted && <span className="text-t3">{muted}</span>}
       </h2>
       {intro && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-t2">{intro}</p>}
     </Reveal>

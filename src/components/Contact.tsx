@@ -1,7 +1,7 @@
 import { ArrowUpRight, Check, Copy, Download, Mail, MapPin, Phone } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { profile } from '../data/resume';
-import { GitHubIcon, LinkedInIcon, Reveal, SectionHeading } from './ui';
+import { GitHubIcon, LinkedInIcon, Reveal, SectionHeading, Spotlight } from './ui';
 
 type Field = { key: string; value: string; href?: string; external?: boolean };
 
@@ -67,7 +67,10 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-28">
+    <section id="contact" className="relative overflow-x-clip py-20 md:py-28">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-1/2 h-[520px] w-[820px] max-w-[120vw] -translate-x-1/2 -translate-y-1/3 rounded-full bg-gradient-to-r from-accent/15 via-purple/10 to-pink/10 blur-[120px]" />
+      </div>
       <div className="container-page">
         <SectionHeading
           label="contact"
@@ -78,9 +81,9 @@ export function Contact() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
           {/* Code card */}
-          <Reveal>
+          <Reveal className="h-full">
             <div
-              className="h-full overflow-hidden rounded-3xl border border-white/10 bg-[#1e1e20] text-[#e6e6e6]"
+              className="flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#1e1e20] text-[#e6e6e6]"
               style={{ boxShadow: 'var(--shadow)' }}
             >
               <div className="flex items-center gap-3 border-b border-black/40 bg-[#2a2a2c] px-4 py-2.5">
@@ -91,7 +94,7 @@ export function Contact() {
                 </div>
                 <span className="font-mono text-xs text-white/60">contact.ts</span>
               </div>
-              <pre className="no-scrollbar overflow-x-auto p-5 font-mono text-[13px] leading-7 sm:p-6 sm:text-sm">
+              <pre className="no-scrollbar flex-1 overflow-x-auto p-5 font-mono text-[13px] leading-7 sm:p-6 sm:text-sm">
                 <code>
                   <span className="tok-kw">export const</span> <span className="tok-type">contact</span> = {'{'}
                   {'\n'}
@@ -116,14 +119,22 @@ export function Contact() {
                   {'};'}
                   {'\n\n'}
                   <span className="tok-com">{'// reachable by email, phone or LinkedIn'}</span>
+                  {'\n'}
+                  <span className="inline-block h-[1.1em] w-[0.55em] translate-y-[0.2em] animate-caret bg-[#0a84ff]" />
                 </code>
               </pre>
+              <div className="flex items-center justify-between gap-3 border-t border-black/40 bg-[#2a2a2c] px-4 py-2 font-mono text-[11px] text-white/45">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#30d158]" /> ready to send
+                </span>
+                <span>TypeScript · UTF-8</span>
+              </div>
             </div>
           </Reveal>
 
           {/* Actions */}
           <Reveal delay={0.08}>
-            <div className="card h-full p-4 sm:p-5">
+            <Spotlight className="card h-full p-4 sm:p-5">
               <ul className="space-y-1">
                 <Row
                   icon={<Mail className="h-5 w-5" />}
@@ -157,7 +168,7 @@ export function Contact() {
               <p aria-live="polite" className="sr-only">
                 {copied ? 'Email copied to clipboard' : ''}
               </p>
-            </div>
+            </Spotlight>
           </Reveal>
         </div>
       </div>

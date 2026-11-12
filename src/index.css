@@ -6,14 +6,15 @@
 :root,
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: 10 10 10;
-  --elev: 22 22 24;
-  --elev2: 30 30 33;
+  --bg: 9 9 11;
+  --elev: 20 20 23;
+  --elev2: 30 30 34;
   --ink: 255 255 255;
-  --text-1: #ffffff;
-  --text-2: rgba(235, 235, 245, 0.72);
-  --text-3: rgba(235, 235, 245, 0.48);
-  --line: rgba(255, 255, 255, 0.09);
+  --text-1: #f5f5f7;
+  --text-2: rgba(235, 235, 245, 0.7);
+  --text-3: rgba(235, 235, 245, 0.45);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
   --accent: 10 132 255;
   --purple: 191 90 242;
   --indigo: 94 92 230;
@@ -21,20 +22,24 @@
   --orange: 255 159 10;
   --pink: 255 55 95;
   --cyan: 100 210 255;
-  --glass: rgba(10, 10, 10, 0.72);
+  --glass: rgba(18, 18, 21, 0.66);
+  --card-top: rgba(255, 255, 255, 0.035);
   --shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.75);
+  --grain-opacity: 0.045;
+  --ambient: 0.13;
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: 245 245 247;
+  --bg: 246 246 248;
   --elev: 255 255 255;
-  --elev2: 236 236 240;
+  --elev2: 239 239 243;
   --ink: 0 0 0;
   --text-1: #1d1d1f;
-  --text-2: rgba(60, 60, 67, 0.78);
+  --text-2: rgba(60, 60, 67, 0.8);
   --text-3: rgba(60, 60, 67, 0.55);
-  --line: rgba(0, 0, 0, 0.09);
+  --line: rgba(0, 0, 0, 0.08);
+  --line-strong: rgba(0, 0, 0, 0.14);
   --accent: 0 113 227;
   --purple: 160 60 210;
   --indigo: 88 86 214;
@@ -42,8 +47,11 @@
   --orange: 200 110 0;
   --pink: 215 40 80;
   --cyan: 0 140 190;
-  --glass: rgba(245, 245, 247, 0.75);
+  --glass: rgba(255, 255, 255, 0.7);
+  --card-top: rgba(255, 255, 255, 0.9);
   --shadow: 0 30px 70px -25px rgba(0, 0, 0, 0.25);
+  --grain-opacity: 0.035;
+  --ambient: 0.1;
 }
 
 /* ---------- Base ---------- */
@@ -56,12 +64,13 @@
     @apply bg-bg text-t1 font-sans antialiased;
     overflow-x: clip;
     text-rendering: optimizeLegibility;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
   }
   ::selection {
     background: rgb(var(--accent) / 0.35);
   }
   section[id] {
-    scroll-margin-top: 4.5rem;
+    scroll-margin-top: 5rem;
   }
   :focus-visible {
     outline: 2px solid rgb(var(--accent));
@@ -89,19 +98,23 @@
   }
   .card {
     @apply rounded-3xl border border-line bg-elev;
+    background-image: linear-gradient(180deg, var(--card-top), transparent 40%);
   }
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-elev2/60 px-3 py-1 text-xs font-medium text-t2;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-elev2/60 px-3 py-1 text-xs font-medium text-t2 transition-colors duration-200;
+  }
+  .chip:hover {
+    @apply border-accent/40 text-t1;
   }
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 active:scale-[0.98];
   }
   .btn-primary {
     @apply btn bg-accent text-white hover:brightness-110;
-    box-shadow: 0 10px 30px -10px rgb(var(--accent) / 0.7);
+    box-shadow: 0 10px 30px -10px rgb(var(--accent) / 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
   .btn-ghost {
-    @apply btn border border-line bg-elev text-t1 hover:bg-elev2;
+    @apply btn border border-line bg-elev text-t1 hover:border-[color:var(--line-strong)] hover:bg-elev2;
   }
   .glass {
     background: var(--glass);
@@ -109,7 +122,13 @@
     backdrop-filter: saturate(180%) blur(20px);
   }
   .text-gradient {
-    background: linear-gradient(90deg, rgb(var(--accent)), rgb(var(--purple)));
+    background: linear-gradient(90deg, rgb(var(--accent)), rgb(var(--purple)) 60%, rgb(var(--pink)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-fade {
+    background: linear-gradient(180deg, var(--text-1) 30%, var(--text-2));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -121,12 +140,90 @@
     mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
     -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
   }
+  .dot-bg {
+    background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line-strong) 20%, var(--line-strong) 80%, transparent);
+  }
   .no-scrollbar {
     scrollbar-width: none;
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  /* Rotating gradient ring (avatar) */
+  .ring-conic {
+    background: conic-gradient(
+      from 0deg,
+      rgb(var(--accent)),
+      rgb(var(--purple)),
+      rgb(var(--pink)),
+      rgb(var(--orange)),
+      rgb(var(--accent))
+    );
+  }
+
+  /* Cursor-following spotlight: glowing border + soft inner light */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .spotlight::before,
+  .spotlight::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .spotlight::before {
+    inset: -1px;
+    padding: 1px;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgb(var(--accent) / 0.75),
+      rgb(var(--purple) / 0.35) 25%,
+      transparent 55%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    z-index: 2;
+  }
+  .spotlight::after {
+    background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--accent) / 0.07), transparent 45%);
+    z-index: 1;
+  }
+  .spotlight:hover::before,
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ---------- Page atmosphere ---------- */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+  background:
+    radial-gradient(55rem 38rem at 0% 0%, rgb(var(--accent) / var(--ambient)), transparent 60%),
+    radial-gradient(45rem 36rem at 100% 15%, rgb(var(--purple) / calc(var(--ambient) * 0.8)), transparent 60%),
+    radial-gradient(60rem 40rem at 50% 115%, rgb(var(--indigo) / calc(var(--ambient) * 0.8)), transparent 60%);
+}
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 80;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* ---------- IDE mock syntax colors (always dark, like an editor) ---------- */

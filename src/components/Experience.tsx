@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { education, experience } from '../data/resume';
 import { duration, formatMonth } from '../lib/dates';
 import { tone } from '../lib/tone';
-import { Reveal, SectionHeading } from './ui';
+import { Reveal, SectionHeading, Spotlight } from './ui';
 
 export function Experience() {
   const [open, setOpen] = useState<Record<string, boolean>>({ [experience[0].company]: true });
@@ -20,7 +20,7 @@ export function Experience() {
         />
 
         <ol className="relative">
-          <span aria-hidden="true" className="absolute bottom-6 left-[19px] top-6 w-px bg-gradient-to-b from-accent via-line to-transparent sm:left-[23px]" />
+          <span aria-hidden="true" className="absolute bottom-6 left-[19px] top-6 w-px bg-gradient-to-b from-accent via-purple/40 to-transparent sm:left-[23px]" />
           {experience.map((role, i) => {
             const t = tone(role.color);
             const isOpen = !!open[role.company];
@@ -28,15 +28,18 @@ export function Experience() {
             return (
               <li key={role.company} className="relative grid grid-cols-[40px_minmax(0,1fr)] gap-4 pb-8 sm:grid-cols-[48px_minmax(0,1fr)] sm:gap-6">
                 <Reveal y={12} className="relative z-10 pt-5">
-                  <span
-                    className={`grid h-10 w-10 place-items-center rounded-xl border ${t.border} bg-bg text-[11px] font-bold sm:h-12 sm:w-12 sm:text-xs ${t.text}`}
-                  >
-                    <span className={`grid h-full w-full place-items-center rounded-[11px] ${t.soft}`}>{role.short}</span>
+                  <span className="relative block h-10 w-10 sm:h-12 sm:w-12">
+                    {i === 0 && <span aria-hidden="true" className={`absolute inset-0 animate-halo rounded-xl ${t.bg}`} />}
+                    <span
+                      className={`relative grid h-full w-full place-items-center rounded-xl border ${t.border} bg-bg text-[11px] font-bold shadow-lg sm:text-xs ${t.text}`}
+                    >
+                      <span className={`grid h-full w-full place-items-center rounded-[11px] ${t.soft}`}>{role.short}</span>
+                    </span>
                   </span>
                 </Reveal>
 
                 <Reveal delay={0.05}>
-                  <article className="card p-5 sm:p-7">
+                  <Spotlight as="article" className="card p-5 sm:p-7">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
                       <div className="min-w-0">
                         <h3 className="text-lg font-bold leading-snug tracking-tight sm:text-xl">{role.title}</h3>
@@ -103,7 +106,7 @@ export function Experience() {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </article>
+                  </Spotlight>
                 </Reveal>
               </li>
             );

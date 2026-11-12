@@ -23,15 +23,3 @@ export function duration(start: string, end: string): string {
   if (months) parts.push(`${months} mo${months > 1 ? 's' : ''}`);
   return parts.join(' ');
 }
-
-export function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const day = 86_400_000;
-  if (diff < day) return 'today';
-  const days = Math.round(diff / day);
-  if (days < 30) return `${days} day${days > 1 ? 's' : ''} ago`;
-  const months = Math.round(days / 30);
-  if (months < 12) return `${months} month${months > 1 ? 's' : ''} ago`;
-  const years = Math.round(months / 12);
-  return `${years} year${years > 1 ? 's' : ''} ago`;
-}

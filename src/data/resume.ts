@@ -216,5 +216,3 @@ export const skills: SkillGroup[] = [
   },
 ];
 
-// Repos hidden from the live GitHub list (e.g. this site itself).
-export const githubExclude = ['TrentonRose_Portfolio'];

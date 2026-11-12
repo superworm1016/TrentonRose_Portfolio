@@ -17,19 +17,23 @@ export function Hero() {
     <section id="home" className="relative overflow-x-clip pb-20 pt-28 md:pb-28 md:pt-32">
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="grid-bg absolute inset-0 opacity-50" />
-        <div className="absolute right-[-10%] top-10 h-[480px] w-[480px] rounded-full bg-accent/15 blur-[130px]" />
+        <div className="absolute right-[-8%] top-16 h-[520px] w-[520px] rounded-full bg-accent/15 blur-[130px]" />
+        <div className="absolute bottom-0 right-[25%] h-[360px] w-[360px] rounded-full bg-purple/10 blur-[120px]" />
       </div>
 
       <div className="container-page grid grid-cols-1 items-center gap-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.3fr)] lg:gap-12">
         <div>
           <motion.div {...fadeUp(0)} className="flex items-center gap-4">
-            <div className="relative">
-              <div className="grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-accent via-indigo to-purple p-[2px]">
-                <div className="grid h-full w-full place-items-center rounded-full bg-bg text-xl font-bold">
-                  {profile.initials}
-                </div>
+            <div className="relative h-16 w-16">
+              <div className="ring-conic absolute -inset-[2px] animate-spin-slow rounded-full" />
+              <div className="ring-conic absolute -inset-1 animate-spin-slow rounded-full opacity-50 blur-md" />
+              <div className="relative grid h-full w-full place-items-center rounded-full bg-bg text-xl font-bold">
+                <span className="text-gradient">{profile.initials}</span>
               </div>
-              <span className="absolute bottom-0.5 right-0.5 h-3.5 w-3.5 rounded-full border-2 border-bg bg-green" />
+              <span className="absolute bottom-0.5 right-0.5 grid h-3.5 w-3.5 place-items-center">
+                <span className="absolute inset-0 animate-halo rounded-full bg-green" />
+                <span className="relative h-3.5 w-3.5 rounded-full border-2 border-bg bg-green" />
+              </span>
             </div>
             <div>
               <p className="font-mono text-xs text-t3">hello, world — I'm</p>
@@ -41,7 +45,7 @@ export function Hero() {
 
           <motion.h1
             {...fadeUp(0.05)}
-            className="mt-6 text-5xl font-bold tracking-tight sm:text-6xl lg:text-[4.1rem] lg:leading-[1.02]"
+            className="text-fade mt-6 pb-1 text-5xl font-bold tracking-[-0.04em] sm:text-6xl lg:text-[3.3rem] lg:leading-[1.02] xl:text-[3.75rem]"
           >
             {profile.name}
           </motion.h1>
@@ -76,12 +80,12 @@ export function Hero() {
             </a>
           </motion.div>
 
-          <motion.dl {...fadeUp(0.28)} className="mt-10 grid grid-cols-3 gap-4 border-t border-line pt-6">
+          <motion.dl {...fadeUp(0.28)} className="mt-10 grid grid-cols-3 gap-2.5 sm:gap-3">
             {profile.facts.map((f) => (
-              <div key={f.label}>
+              <div key={f.label} className="card rounded-2xl px-3 py-3.5 sm:px-4 sm:py-4">
                 <dt className="sr-only">{f.label}</dt>
-                <dd className="text-xl font-bold tracking-tight sm:text-2xl">{f.value}</dd>
-                <dd className="mt-1 text-xs leading-snug text-t3 sm:text-sm">{f.label}</dd>
+                <dd className="text-gradient text-xl font-bold tracking-tight sm:text-[1.65rem]">{f.value}</dd>
+                <dd className="mt-1 text-[11px] leading-snug text-t3 sm:text-xs">{f.label}</dd>
               </div>
             ))}
           </motion.dl>

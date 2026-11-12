@@ -10,7 +10,6 @@ const LINKS = [
   { id: 'projects', label: 'Projects' },
   { id: 'experience', label: 'Experience' },
   { id: 'skills', label: 'Skills' },
-  { id: 'github', label: 'GitHub' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -30,6 +29,9 @@ function useTheme(): [Theme, () => void] {
   }, [theme]);
   return [theme, () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))];
 }
+
+const iconBtn =
+  'grid h-9 w-9 place-items-center rounded-full text-t2 transition-colors hover:bg-elev2 hover:text-t1';
 
 export function Nav() {
   const [theme, toggleTheme] = useTheme();
@@ -65,32 +67,35 @@ export function Nav() {
   }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'glass border-b border-line' : 'border-b border-transparent'
-      }`}
-    >
-      <nav className="container-page flex h-16 items-center justify-between gap-4" aria-label="Primary">
-        <a href="#home" className="group flex items-center gap-2.5" onClick={() => setOpen(false)}>
-          <span className="grid h-8 w-8 place-items-center rounded-[10px] bg-gradient-to-br from-accent to-purple text-[13px] font-bold text-white shadow-lg shadow-accent/20">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4">
+      <nav
+        aria-label="Primary"
+        className={`mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 rounded-full border pl-2 pr-1.5 transition-all duration-500 ${
+          scrolled || open
+            ? 'glass border-line shadow-[0_12px_40px_-16px_rgba(0,0,0,0.45)]'
+            : 'border-transparent'
+        }`}
+      >
+        <a href="#home" className="flex items-center gap-2.5 rounded-full pr-2" onClick={() => setOpen(false)}>
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-accent to-purple text-[13px] font-bold text-white shadow-lg shadow-accent/25">
             {profile.initials}
           </span>
           <span className="hidden text-sm font-semibold tracking-tight sm:block">{profile.name}</span>
         </a>
 
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-0.5 lg:flex">
           {LINKS.map((l) => (
             <li key={l.id}>
               <a
                 href={`#${l.id}`}
-                className={`relative rounded-full px-3.5 py-1.5 text-sm transition-colors ${
+                className={`relative block rounded-full px-3.5 py-1.5 text-[13.5px] transition-colors ${
                   active === l.id ? 'text-t1' : 'text-t3 hover:text-t1'
                 }`}
               >
                 {active === l.id && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 -z-10 rounded-full bg-elev2"
+                    className="absolute inset-0 -z-10 rounded-full border border-line bg-elev2"
                     transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                   />
                 )}
@@ -100,7 +105,7 @@ export function Nav() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           <AnimatePresence>
             {onIntro && (
               <motion.a
@@ -114,38 +119,39 @@ export function Nav() {
               </motion.a>
             )}
           </AnimatePresence>
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-            className="grid h-9 w-9 place-items-center rounded-full text-t2 transition-colors hover:bg-elev2 hover:text-t1"
-          >
+          <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub" className={iconBtn}>
             <GitHubIcon className="h-[18px] w-[18px]" />
           </a>
-          <a
-            href={profile.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-            className="grid h-9 w-9 place-items-center rounded-full text-t2 transition-colors hover:bg-elev2 hover:text-t1"
-          >
+          <a href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className={iconBtn}>
             <LinkedInIcon className="h-[17px] w-[17px]" />
           </a>
           <button
             type="button"
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            className="grid h-9 w-9 place-items-center rounded-full text-t2 transition-colors hover:bg-elev2 hover:text-t1"
+            className={iconBtn}
           >
-            {theme === 'dark' ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={theme}
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {theme === 'dark' ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
+              </motion.span>
+            </AnimatePresence>
           </button>
+          <a href="#contact" className="btn-primary ml-1 hidden px-4 py-2 text-[13px] md:inline-flex">
+            Let's talk
+          </a>
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-label="Toggle menu"
             aria-expanded={open}
-            className="grid h-9 w-9 place-items-center rounded-full text-t2 hover:bg-elev2 hover:text-t1 lg:hidden"
+            className={`${iconBtn} lg:hidden`}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -155,19 +161,20 @@ export function Nav() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="glass overflow-hidden border-b border-line lg:hidden"
+            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            transition={{ duration: 0.2 }}
+            className="glass mx-auto mt-2 max-w-5xl overflow-hidden rounded-3xl border border-line shadow-2xl lg:hidden"
           >
-            <ul className="container-page grid gap-1 py-3">
+            <ul className="grid gap-1 p-2">
               {LINKS.map((l) => (
                 <li key={l.id}>
                   <a
                     href={`#${l.id}`}
                     onClick={() => setOpen(false)}
-                    className={`block rounded-xl px-3 py-2.5 text-base ${
-                      active === l.id ? 'bg-elev2 text-t1' : 'text-t2'
+                    className={`block rounded-2xl px-4 py-3 text-base ${
+                      active === l.id ? 'bg-elev2 text-t1' : 'text-t2 hover:bg-elev2/60'
                     }`}
                   >
                     {l.label}

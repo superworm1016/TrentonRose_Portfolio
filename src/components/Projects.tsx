@@ -2,7 +2,7 @@ import { Bot, Check, Clock, FileText, HeartPulse, ShieldCheck, Sparkles, Workflo
 import type { ComponentType } from 'react';
 import { projects, type Project } from '../data/resume';
 import { tone } from '../lib/tone';
-import { Reveal, SectionHeading } from './ui';
+import { Reveal, SectionHeading, Spotlight } from './ui';
 
 const VISUAL_TONE: Record<Project['visual'], string> = {
   health: 'green',
@@ -113,9 +113,12 @@ export function Projects() {
             const Visual = VISUALS[p.visual];
             return (
               <Reveal key={p.name} delay={i * 0.08} className="h-full">
-                <article className="card group flex h-full flex-col overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+                <Spotlight
+                  as="article"
+                  className="card group flex h-full flex-col overflow-hidden transition-[transform,box-shadow] duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow)]"
+                >
                   <div className={`relative grid h-56 place-items-center overflow-hidden border-b border-line bg-gradient-to-br ${t.glow} px-6`}>
-                    <div className="grid-bg absolute inset-0 opacity-40" />
+                    <div className="dot-bg absolute inset-0 opacity-60 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]" />
                     <div className="relative transition-transform duration-500 group-hover:scale-[1.03]">
                       <Visual />
                     </div>
@@ -141,7 +144,7 @@ export function Projects() {
                       ))}
                     </ul>
                   </div>
-                </article>
+                </Spotlight>
               </Reveal>
             );
           })}

@@ -11,11 +11,11 @@ Personal portfolio for **Trenton Rose**, Senior Full Stack Developer (Java · Re
 - **Featured**: a walkthrough of the AI Engineering Knowledge Assistant Platform
 - **Projects**: healthcare, workflow automation, and AI platform builds
 - **Experience**: an expandable timeline from Garmin to Jack Henry, plus education
-- **Skills**: six numbered groups, from backend to quality & security
-- **GitHub**: contribution chart and recent public repositories, fetched live
+- **Skills**: six icon-led groups, from backend to quality & security, plus a scrolling tech marquee
 - **Contact**: code-styled contact card, copy-to-clipboard email, CV download
 
-The site has dark and light themes (remembered per visitor) and respects `prefers-reduced-motion`.
+The site has dark and light themes (remembered per visitor), cursor-following spotlight cards, a floating
+glass navigation bar, and respects `prefers-reduced-motion`.
 
 ## Tech
 
