@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Design tokens ---------- */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: 10 10 10;
+  --elev: 22 22 24;
+  --elev2: 30 30 33;
+  --ink: 255 255 255;
+  --text-1: #ffffff;
+  --text-2: rgba(235, 235, 245, 0.72);
+  --text-3: rgba(235, 235, 245, 0.48);
+  --line: rgba(255, 255, 255, 0.09);
+  --accent: 10 132 255;
+  --purple: 191 90 242;
+  --indigo: 94 92 230;
+  --green: 48 209 88;
+  --orange: 255 159 10;
+  --pink: 255 55 95;
+  --cyan: 100 210 255;
+  --glass: rgba(10, 10, 10, 0.72);
+  --shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.75);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: 245 245 247;
+  --elev: 255 255 255;
+  --elev2: 236 236 240;
+  --ink: 0 0 0;
+  --text-1: #1d1d1f;
+  --text-2: rgba(60, 60, 67, 0.78);
+  --text-3: rgba(60, 60, 67, 0.55);
+  --line: rgba(0, 0, 0, 0.09);
+  --accent: 0 113 227;
+  --purple: 160 60 210;
+  --indigo: 88 86 214;
+  --green: 36 160 70;
+  --orange: 200 110 0;
+  --pink: 215 40 80;
+  --cyan: 0 140 190;
+  --glass: rgba(245, 245, 247, 0.75);
+  --shadow: 0 30px 70px -25px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-bg text-t1 font-sans antialiased;
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: rgb(var(--accent) / 0.35);
+  }
+  section[id] {
+    scroll-margin-top: 4.5rem;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ---------- Components ---------- */
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-page px-4 sm:px-6 lg:px-8;
+  }
+  .card {
+    @apply rounded-3xl border border-line bg-elev;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-elev2/60 px-3 py-1 text-xs font-medium text-t2;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 active:scale-[0.98];
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white hover:brightness-110;
+    box-shadow: 0 10px 30px -10px rgb(var(--accent) / 0.7);
+  }
+  .btn-ghost {
+    @apply btn border border-line bg-elev text-t1 hover:bg-elev2;
+  }
+  .glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+  }
+  .text-gradient {
+    background: linear-gradient(90deg, rgb(var(--accent)), rgb(var(--purple)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .grid-bg {
+    background-image: linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------- IDE mock syntax colors (always dark, like an editor) ---------- */
+.tok-kw {
+  color: #fc5fa3;
+  font-weight: 600;
+}
+.tok-str {
+  color: #fc6a5d;
+}
+.tok-com {
+  color: #7f8c98;
+  font-style: italic;
+}
+.tok-ann {
+  color: #fd8f3f;
+}
+.tok-type {
+  color: #5dd8ff;
+}
+.tok-num {
+  color: #d0bf69;
+}
+.tok-tag {
+  color: #67b7a4;
+}
+.tok-key {
+  color: #a167e6;
+}
